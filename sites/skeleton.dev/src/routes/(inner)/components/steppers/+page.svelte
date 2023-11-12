@@ -7,6 +7,7 @@
 	// Sveld
 	import sveldStepper from '@skeletonlabs/skeleton/components/Stepper/Stepper.svelte?raw&sveld';
 	import sveldStep from '@skeletonlabs/skeleton/components/Stepper/Step.svelte?raw&sveld';
+	import { fade, fly, blur } from 'svelte/transition';
 
 	// Docs Shell
 	const settings: DocsShellSettings = {
@@ -60,8 +61,17 @@
 	<svelte:fragment slot="sandbox">
 		<DocsPreview>
 			<svelte:fragment slot="preview">
-				<div class="w-full card p-4 text-token">
-					<Stepper on:next={onNextHandler} on:back={onBackHandler} on:step={onStepHandler} on:complete={onCompleteHandler}>
+				<div class="w-full p-4 card text-token">
+					<Stepper
+						on:next={onNextHandler}
+						on:back={onBackHandler}
+						on:step={onStepHandler}
+						on:complete={onCompleteHandler}
+						transitionNavIn={blur}
+						transitionNavInParams={{ duration: 3333 }}
+						transitionIn={fly}
+						transitionInParams={{ duration: 2222, x: 222 }}
+					>
 						<Step>
 							<svelte:fragment slot="header">Get Started!</svelte:fragment>
 							<p>This example Stepper will teach you how to use this component. Tap <u>next</u> to proceed to the next step.</p>

@@ -66,6 +66,26 @@
 	 * @type {TransitionParams}
 	 */
 	export let transitionOutParams: TransitionParams<TransitionOut> = getContext('transitionOutParams');
+	/**
+	 * Transition params provided to `transitionNavIn`.
+	 * @type {TransitionParams}
+	 */
+	export let transitionNavIn: TransitionIn = getContext('transitionNavIn');
+	/**
+	 * Transition params provided to `transitionNavInParams`.
+	 * @type {TransitionParams}
+	 */
+	export let transitionNavInParams: TransitionParams<TransitionIn> = getContext('transitionNavInParams');
+	/**
+	 * Provide the transition to used on exit.
+	 * @type {TransitionNavOut}
+	 */
+	export let transitionNavOut: TransitionOut = getContext('transitionNavOut');
+	/**
+	 * Transition params provided to `transitionNavOut`.
+	 * @type {TransitionNavOutParams}
+	 */
+	export let transitionNavOutParams: TransitionParams<TransitionOut> = getContext('transitionNavOutParams');
 
 	// Register step on init (keep these paired)
 	const stepIndex = $state.total;
@@ -114,19 +134,27 @@
 {#if stepIndex === $state.current}
 	<div class="step {classesBase}" data-testid="step">
 		<!-- Slot: Header -->
-		<header class="step-header {classesHeader}">
+		<header
+			class="step-header {classesHeader}"
+			in:dynamicTransition|local={{ transition: transitionIn, params: transitionInParams, enabled: transitions }}
+			out:dynamicTransition|local={{ transition: transitionOut, params: transitionOutParams, enabled: transitions }}
+		>
 			<slot name="header">{stepTerm} {stepIndex + 1}</slot>
 		</header>
 		<!-- Slot: Default -->
-		<div class="step-content {classesContent}">
+		<div
+			class="step-content {classesContent}"
+			in:dynamicTransition|local={{ transition: transitionIn, params: transitionInParams, enabled: transitions }}
+			out:dynamicTransition|local={{ transition: transitionOut, params: transitionOutParams, enabled: transitions }}
+		>
 			<slot>({stepTerm} {stepIndex + 1} Content)</slot>
 		</div>
 		<!-- Navigation -->
 		{#if $state.total > 1}
 			<div
 				class="step-navigation {classesNavigation}"
-				in:dynamicTransition|local={{ transition: transitionIn, params: transitionInParams, enabled: transitions }}
-				out:dynamicTransition|local={{ transition: transitionOut, params: transitionOutParams, enabled: transitions }}
+				in:dynamicTransition|local={{ transition: transitionNavIn, params: transitionNavInParams, enabled: transitions }}
+				out:dynamicTransition|local={{ transition: transitionNavOut, params: transitionNavOutParams, enabled: transitions }}
 			>
 				{#if stepIndex === 0 && $$slots.navigation}
 					<!-- Slot: Navigation -->
@@ -143,7 +171,7 @@
 					<!-- Button: Next -->
 					<button type={buttonNextType} class="btn {buttonNext}" on:click={onNext} disabled={locked}>
 						{#if locked}
-							<svg class="w-3 aspect-square fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+							<svg class="w-3 fill-current aspect-square" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
 								<path
 									d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z"
 								/>
